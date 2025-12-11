@@ -10,12 +10,12 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-       component: index,     
+       component: index,
        children: [
         { path: '', redirect: 'floor1' }, // 重定向到子路由66
         { path: 'floor1', component: floor1, name: 'floor1' },
         { path: 'floor2', component: floor2, name: 'floor2' },
-        { path: 'floor3', component: floor3, name: 'floor3' },     
+        { path: 'floor3', component: floor3, name: 'floor3' },    
       ]
     }
   ]
