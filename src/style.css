@@ -12,7 +12,7 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
+  *{box-sizing:border-box;}
 a {
   font-weight: 500;
   color: #646cff;
@@ -29,7 +29,8 @@ body {
   min-width: 320px;
   min-height: 100vh;
 
-  background-color: #306797;
+  background-color:rgba(24,61,126,1);	
+  font-size:14px;
 }
 
 h1 {
@@ -79,3 +80,30 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+
+
+
+
+.floorMsg{
+  background-color: rgba(249, 213, 171, 0.1);
+  color: darksalmon;
+  padding: 5px;
+}
+.boxMachine{
+    display: flex;
+    display: -webkit-flex; 
+    margin: 0;
+    padding: 0;
+    flex-wrap: wrap;
+}
+.boxitem{ margin: 20px;}
+.boxMachine .MachineImg{width: 80px;}
+.boxMachine .MachineName{width: 80px;background-color: #213547;color: white; border-radius: 5px;font-size: x-large;  text-align: center;}
+
+
+
+
+
+
+

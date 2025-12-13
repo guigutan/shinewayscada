@@ -17,6 +17,7 @@
     }
     .sc-content{
         width: 100%;
-        background-color: rgb(4, 112, 126);
+        margin: 0;        
+        padding: 0;
     }
 </style>
