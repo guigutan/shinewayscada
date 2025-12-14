@@ -1,5 +1,56 @@
 <script setup lang="ts">
-  
+import { ref, onMounted, onUnmounted, computed } from 'vue'
+import dayjs from 'dayjs'
+
+// 1. 时间/日期/星期相关
+const now = ref(Date.now())
+const time = computed(() => dayjs(now.value).format('HH:mm:ss'))
+const date = computed(() => dayjs(now.value).format('YYYY/MM/DD'))
+const week = computed(() => {
+  const weekList = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六']
+  return weekList[new Date(now.value).getDay()] // getDay()返回0-6，对应数组索引
+})
+
+// 2. 60秒倒计时相关
+const countdown = ref(60)
+const countdownText = computed(() => countdown.value.toString().padStart(2, '0'))
+
+// 定时器管理
+let timeTimer: number | null = null
+let countdownTimer: number | null = null
+
+// 启动倒计时
+const startCountdown = () => {
+  if (countdownTimer) clearInterval(countdownTimer)
+  countdownTimer = window.setInterval(() => {
+    if (countdown.value > 0) {
+      countdown.value--
+    } else {
+      // 可选：停止或循环
+      // clearInterval(countdownTimer!)
+      countdown.value = 60
+    }
+  }, 1000)
+}
+
+// 重置倒计时
+const resetCountdown = () => {
+  countdown.value = 60
+  startCountdown()
+}
+
+// 生命周期
+onMounted(() => {
+  timeTimer = window.setInterval(() => now.value = Date.now(), 1000)
+  startCountdown()
+})
+
+onUnmounted(() => {
+  if (timeTimer) clearInterval(timeTimer)
+  if (countdownTimer) clearInterval(countdownTimer)
+})
+
+
 </script>
 
 <template>  
@@ -7,10 +58,10 @@
         <div class="sc-time">
           <div class="sc-tiemtitle">一楼CNC加工中心</div>
           <div class="sc-timenow">
-            <div class="sc-datetime">16:53:21</div>
-            <div class="sc-dayandweek">2025/12/13 星期六</div>
+            <div class="sc-datetime">{{ time }}</div>
+            <div class="sc-dayandweek">{{ date }}  {{ week }}</div>
           </div>
-          <div class="sc-timendjs">60秒刷新一次(59)</div>
+          <div class="sc-timendjs">60秒刷新一次({{ countdownText }})</div>
         </div>    
         <ul id="sc-menu">
           <li><router-link to="/floor1">一楼</router-link></li> 
