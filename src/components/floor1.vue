@@ -1,4 +1,6 @@
+<!--//src/components/floor1.vue-->
 <script setup lang="ts">
+
 
   import { ref, onMounted } from "vue"; // 引入 onMounted 钩子
   import { LedStatus, type LedStatusRow } from '@/api/LedStatus';
@@ -7,6 +9,8 @@
   const data = ref<LedStatusRow[]>([]);
   const loading = ref(false);
 
+  import { useLedStatusStore } from '@/store/LedStatus'; // 引入
+  const LedStatusStore = useLedStatusStore();
 
   const query = async () => {
     loading.value = true;
@@ -15,8 +19,9 @@
         const res = await LedStatus(scadano.value); 
         if (res.data.success) {
 
-          data.value = res.data.data;
-          console.log(data);
+          data.value = res.data.data;    
+          console.log("接口返回数据:", data.value);       
+          LedStatusStore.setData(data.value); // 存储到 Store          
 
         } else {
 

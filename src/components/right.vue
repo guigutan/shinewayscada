@@ -1,4 +1,18 @@
+<!--//src/components/right.vue-->
 <script setup lang="ts">
+
+  import { computed } from "vue"; // 改用 computed
+  import { useLedStatusStore } from '@/store/LedStatus';
+
+  const LedStatusStore = useLedStatusStore();
+  console.log("Store中的data:", LedStatusStore.data);
+
+  const Count0 = computed(() => LedStatusStore.data.filter(item => item.LedStatus === '0').length);
+  const Count1 = computed(() => LedStatusStore.data.filter(item => item.LedStatus === '1').length);
+  const Count2 = computed(() => LedStatusStore.data.filter(item => item.LedStatus === '2').length);
+  const Count3 = computed(() => LedStatusStore.data.filter(item => item.LedStatus === '3').length); 
+  const totalMachines = computed(() => Count0.value + Count1.value + Count2.value + Count3.value);
+
 </script>
 
 <template>
@@ -10,28 +24,28 @@
             <td><div class="sc-LedIco"><img src="../assets/greenLED.png"/></div></td>
             <td><div class="sc-MachineIco"><img src="../assets/CNC40.png"/></div></td>
             <td><div class="sc-LedStr">绿  灯</div></td>
-            <td><div class="sc-LedSum">37台</div></td>
+            <td><div class="sc-LedSum">{{Count1}}台</div></td>
             <td><div class="sc-LedPercentage"><span class="sc-Percentage">60%</span></div></td>
           </tr>
           <tr>
             <td><div class="sc-LedIco"><img src="../assets/yellowLED.png"/></div></td> 
             <td><div class="sc-MachineIco"><img src="../assets/CNC40.png"/></div></td>
             <td><div class="sc-LedStr">黄  灯</div></td>
-            <td><div class="sc-LedSum">9台</div></td>
+            <td><div class="sc-LedSum">{{Count2}}台</div></td>
             <td><div class="sc-LedPercentage"><span class="sc-Percentage">33%</span></div></td>
           </tr>
           <tr>
             <td><div class="sc-LedIco"><img src="../assets/redLED.png"/></div></td>
             <td><div class="sc-MachineIco"><img src="../assets/CNC40.png"/></div></td>
             <td><div class="sc-LedStr">红  灯</div></td>
-            <td><div class="sc-LedSum">11台</div></td>
+            <td><div class="sc-LedSum">{{Count3}}台</div></td>
             <td><div class="sc-LedPercentage"><span class="sc-Percentage">6%</span></div></td>
           </tr>
           <tr>
             <td><div class="sc-LedIco"><img src="../assets/errorLED.png"/></div></td>
             <td><div class="sc-MachineIco"><img src="../assets/CNC40.png"/></div></td>
             <td><div class="sc-LedStr">通信异常</div></td>
-            <td><div class="sc-LedSum">8台</div></td>
+            <td><div class="sc-LedSum">{{Count0}}台</div></td>
             <td><div class="sc-LedPercentage"><span class="sc-Percentage">2%</span></div></td>
           </tr>
          
@@ -73,7 +87,7 @@
 
           <tr><td colspan="2"  class="sc-topH"></td></tr>
 
-          <tr><td colspan="2"><div class="sc-jdl"><div>机台总数：108</div> <div>稼动率：55%</div></div></td></tr>
+          <tr><td colspan="2"><div class="sc-jdl"><div>机台总数：{{ totalMachines }}</div> <div>稼动率：55%</div></div></td></tr>
 
         </tbody>
       </table>
