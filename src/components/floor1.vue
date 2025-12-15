@@ -1,55 +1,62 @@
 <script setup lang="ts">
-    import {ref} from "vue";
-    const mydata=[{MachineName:'C1' ,LedStatus: '1' }, {MachineName:'C2' ,LedStatus: '2' }, {MachineName:'C3' ,LedStatus: '3' }];
-    const items = ref(mydata)
-   
 
-    
-    import { LedStatus, type LedStatusRow } from '@/api/LedStatus';
-    const barcode = ref('');
-    const data = ref<LedStatusRow[]>([]);
-    const loading = ref(false);
+  import { ref, onMounted } from "vue"; // 引入 onMounted 钩子
+  import { LedStatus, type LedStatusRow } from '@/api/LedStatus';
 
-    const query = async () => {
+  const scadano = ref('202512141442'); 
+  const data = ref<LedStatusRow[]>([]);
+  const loading = ref(false);
+
+
+  const query = async () => {
     loading.value = true;
     try {
-        const res = await LedStatus(barcode.value);
+
+        const res = await LedStatus(scadano.value); 
         if (res.data.success) {
-        data.value = res.data.data;
-        console.log(data);
+
+          data.value = res.data.data;
+          console.log(data);
+
         } else {
-        alert('查询失败');
+
+          alert('查询失败');
+
         }
+
     } catch (e) {
+
         alert('网络错误');
         console.error(e);
+
     } finally {
+
         loading.value = false;
     }
-    };
+  };
+
+  // 2. 组件挂载时自动调用查询函数
+  onMounted(() => {
+    query();
+  });
 
 
 </script>
 
 <template>    
-    <div class="floorMsg"><button @click="query" class="sc-button">查询</button>
-    <input v-model="barcode" placeholder="输入条码（支持模糊查询）" @keyup.enter="query" />
-</div>
+    <div class="floorMsg">floorMsg</div>
     <div class="boxMachine">
-     <!-- <div class="boxitem"> <img src="../assets/CNC80.png" class="MachineImg" alt=""> <div class="MachineName">C1</div></div> -->
-   <div class="boxitem" v-for="info in items"> 
-        <img src="../assets/CNC80.png" class="MachineImg" alt=""> 
-        <div class="MachineName">{{info.MachineName }}</div>
-    </div>
-       
-           
-        
-
-
-
+       <!-- <div class="boxitem"> <img src="../assets/CNC80.png" class="MachineImg" alt=""> <div class="MachineName">C1</div></div> -->
+      <div class="boxitem" v-for="info in data"> 
+            <img src="../assets/CNC80.png" class="MachineImg" alt=""> 
+            <div class="MachineName" :class="`LedStatus${info.LedStatus}` ">{{info.MachineNO}}</div>
+        </div>
     </div>
 </template>
 
-<style scoped>
-    
+<style scoped>    
+  .LedStatus0{background-color: darkgray;}
+  .LedStatus1{background-color: green;}
+  .LedStatus2{background-color: yellow;color: black;}
+  .LedStatus3{background-color: red;}
 </style>

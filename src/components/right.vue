@@ -14,7 +14,7 @@
             <td><div class="sc-LedPercentage"><span class="sc-Percentage">60%</span></div></td>
           </tr>
           <tr>
-            <td><div class="sc-LedIco"><img src="../assets/yellowLED.png"/></div></td>
+            <td><div class="sc-LedIco"><img src="../assets/yellowLED.png"/></div></td> 
             <td><div class="sc-MachineIco"><img src="../assets/CNC40.png"/></div></td>
             <td><div class="sc-LedStr">黄  灯</div></td>
             <td><div class="sc-LedSum">9台</div></td>
