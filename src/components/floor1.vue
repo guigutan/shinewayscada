@@ -17,8 +17,7 @@
   const shiftInfo = getShiftInfo(testTime.value);
  
 
-  // const scadano = ref(dayjs(now.value).format('YYYYMMDDHHmm')); 
-  const scadano = ref('202512141443'); 
+   const scadano = ref(dayjs(now.value).format('YYYYMMDDHHmm'));  
   
   const data = ref<LedStatusRow[]>([]);
   const loading = ref(false);
@@ -38,11 +37,11 @@
         const res = await LedStatus(scadano.value); 
         if (res.data.success) {
           data.value = res.data.data;               
-          Count0.value = res.data.data.filter(item => item.LedStatus == '0').length;
+          Count0.value = res.data.data.filter(item => item.LedStatus == '-1').length;
           Count1.value = res.data.data.filter(item => item.LedStatus == '1').length;
           Count2.value = res.data.data.filter(item => item.LedStatus == '2').length;
           Count3.value = res.data.data.filter(item => item.LedStatus == '3').length;
-          CountAll.value = Count0.value+Count1.value+Count2.value+Count3.value;         
+          CountAll.value = res.data.data.length;         
 
         } else {
           alert('查询失败');
@@ -157,7 +156,7 @@
         <tbody>
           <tr>
             <td><div class="sc-counttile">今日产量</div></td>
-            <td rowspan="2"><div class="sc-SumDay">{{ dataSum[0]?.DaySum }}</div></td>
+            <td rowspan="2"><div class="sc-SumDay">{{ dataSum[0]?.DaySum??0 }}</div></td>
           </tr>
           <tr>
             <td><div  class="sc-countTimes">({{today}}号00点-{{tomorrow}}号00点)</div></td>           
@@ -167,7 +166,7 @@
             
            <tr>
             <td><div class="sc-counttile">上一班({{shiftInfo.LastShift}})</div></td>
-            <td rowspan="2"><div class="sc-SumShift1">{{ dataSum[0]?.LastSum }}</div></td>
+            <td rowspan="2"><div class="sc-SumShift1">{{ dataSum[0]?.LastSum??0 }}</div></td>
           </tr>
           <tr>
             <td><div class="sc-countTimes">({{shiftInfo.LastT1.slice(6, 8)}}号{{shiftInfo.LastT1.slice(8, 10)}}点-{{shiftInfo.LastT2.slice(6, 8)}}号{{shiftInfo.LastT2.slice(8, 10)}}点)</div></td>           
@@ -178,7 +177,7 @@
 
           <tr>
             <td><div class="sc-counttile">当前班({{shiftInfo.ThisShift}})</div></td>
-            <td rowspan="2"><div class="sc-SumShift2">{{ dataSum[0]?.ThisSum }}</div></td>
+            <td rowspan="2"><div class="sc-SumShift2">{{ dataSum[0]?.ThisSum??0 }}</div></td>
           </tr>
           <tr>
             <td><div class="sc-countTimes">({{shiftInfo.ThisT1.slice(6, 8)}}号{{shiftInfo.ThisT1.slice(8, 10)}}点-{{shiftInfo.ThisT2.slice(6, 8)}}号{{shiftInfo.ThisT2.slice(8, 10)}}点)</div></td>           
