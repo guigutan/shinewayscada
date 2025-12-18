@@ -1,6 +1,6 @@
 // src/store/LedStatus.ts
 import { defineStore } from 'pinia';
-import type { LedStatusRow } from '@/api/LedStatus';
+import type { LedStatusRow } from '@/api/GetLed1F';
 
 export const useLedStatusStore = defineStore('ledStatus', {
   state: () => ({

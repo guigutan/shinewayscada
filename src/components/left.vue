@@ -61,7 +61,7 @@ onUnmounted(() => {
             <div class="sc-datetime">{{ time }}</div>
             <div class="sc-dayandweek">{{ date }}  {{ week }}</div>
           </div>
-          <div class="sc-timendjs">60秒刷新一次({{ countdownText }})</div>
+          <div class="sc-timendjs">  </div>
         </div>    
         <ul id="sc-menu">
           <li><router-link to="/floor1">一楼</router-link></li> 
@@ -91,7 +91,7 @@ onUnmounted(() => {
 
 
 .sc-timendjs{
- margin: 1rem 0;
+ margin-top: 3rem;
  text-align: right;
  color: wheat;
 }

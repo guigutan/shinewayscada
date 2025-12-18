@@ -101,3 +101,6 @@ INSERT INTO t_machine (MachineNO,MachineName,IpAddr,PortNum)VALUES ('C100','C100
 INSERT INTO t_machine (MachineNO,MachineName,IpAddr,PortNum)VALUES ('C101','C101','192.168.6.101',10000);
 INSERT INTO t_machine (MachineNO,MachineName,IpAddr,PortNum)VALUES ('C102','C102','192.168.6.102',10000);
 INSERT INTO t_machine (MachineNO,MachineName,IpAddr,PortNum)VALUES ('C103','C103','192.168.6.103',10000);
+INSERT INTO t_machine (MachineNO,MachineName,IpAddr,PortNum)VALUES ('C104','C104','192.168.6.104',10000);
+INSERT INTO t_machine (MachineNO,MachineName,IpAddr,PortNum)VALUES ('C105','C105','192.168.6.105',10000);
+INSERT INTO t_machine (MachineNO,MachineName,IpAddr,PortNum)VALUES ('C106','C106','192.168.6.106',10000);
