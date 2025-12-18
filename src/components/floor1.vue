@@ -319,8 +319,77 @@ onUnmounted(() => {
         <button class="close-btn" @click="dialogVisible = false">×</button>
       </div>
       <div class="modal-body">
-        <p>这是 {{ currentMachineNO }} 设备的详情弹窗</p>
-        <p>后续将在这里展示根据设备编号查询到的信息</p>
+        <p>设备名称：{{ currentMachineNO }} </p>
+        <p>设备地址：192.168.6.13 </p>
+        <p>最后一次采集在：2025-12-18 23:45:22</p>
+        <p>设备状态：<span class="sc-ledradius LedStatus1">绿灯</span></p>
+        <p>设备计数：12563</p>
+         <p><br/></p>
+        <p>上一班（白班）：12563</p>
+        <p>当前班（夜班）：12563</p>
+        <table class="sc-OneMachineDetail">
+          <tbody>
+            <tr class="sc-lastTime">
+              <td>20点</td>
+              <td>19点</td>
+              <td>18点</td>
+              <td>17点</td>
+              <td>16点</td>
+              <td>15点</td>
+              <td>14点</td>
+              <td>13点</td>
+              <td>12点</td>
+              <td>10点</td>
+              <td>09点</td>
+              <td>08点</td>
+            </tr>
+            <tr>
+              <td>12</td>
+              <td>22</td>
+              <td>31</td>
+              <td>10</td>
+              <td>5</td>
+              <td>23</td>
+              <td>12</td>
+              <td>22</td>
+              <td>31</td>
+              <td>10</td>
+              <td>5</td>
+              <td>23</td>
+            </tr>
+            <tr class="sc-thisTime">
+              <td>07点</td>
+              <td>06点</td>
+              <td>05点</td>
+              <td>04点</td>
+              <td>03点</td>
+              <td>02点</td>
+              <td>01点</td>
+              <td>00点</td>
+              <td>23点</td>
+              <td>22点</td>
+              <td>21点</td>
+              <td>20点</td>
+            </tr>
+            <tr>
+              <td>12</td>
+              <td>33</td>
+              <td>45</td>
+              <td>10</td>
+              <td>8</td>
+              <td>19</td>
+              <td>12</td>
+              <td>33</td>
+              <td>45</td>
+              <td>10</td>
+              <td>8</td>
+              <td>19</td>
+            </tr>
+          </tbody>
+        </table>
+       
+         
+
       </div>
       <div class="modal-footer">
         <button class="btn cancel" @click="dialogVisible = false">取消</button>
@@ -548,9 +617,31 @@ onUnmounted(() => {
 
 .modal-body {
   padding: 20px;
-  line-height: 1.8;
+  line-height: 1;
   color: #666;
 }
+
+.sc-ledradius{ 
+  border-radius: 5px;
+  padding: 5px 10px;
+  color: white;
+}
+.sc-OneMachineDetail{
+  border-collapse: collapse;  
+ 
+}
+.sc-OneMachineDetail td{
+    margin: 0;
+    padding: 3px;
+    word-wrap: break-word;
+    word-break: break-all;
+    text-align: center;     
+    border: 1px solid #00CCFF;
+}
+
+.sc-lastTime td{background-color: aquamarine;}
+.sc-thisTime td{background-color: aquamarine;}
+
 
 .modal-footer {
   padding: 16px 20px;
