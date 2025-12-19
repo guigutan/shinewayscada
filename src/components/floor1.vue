@@ -1,9 +1,16 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, computed } from 'vue'
-import { LedStatus, type LedStatusRow } from '@/api/GetLed1F';
-import { Sum1F, type Sum1FRow } from '@/api/GetSum1F';
-import { calcPercentage } from './myfunc/calcPercentage';
+
+import { GetLedStatus, type LedStatusRow } from '@/api/GetLed1F';
+import { PostSum, type SumRow } from '@/api/GetSum1F';
+import { GetMachineInfo,type MachineInfoRow } from '@/api/MachineInfo1F';
+import { GetNewScada,type NewsSadaRow } from '@/api/GetNewScada1F';
+import { PostMachineHoursSum,type MachineHoursSumRow } from '@/api/PostMachineHoursSum1F';
+
+import { calcPercentage } from  './myfunc/calcPercentage';
 import { getShiftInfo } from './myfunc/getShiftInfo';
+
+
 import dayjs from 'dayjs';
 
 
@@ -23,8 +30,8 @@ const shiftInfo = getShiftInfo(testTime.value);
 
 //时间点的LED状态数量相关
 const scadano = ref(dayjs(now.value).format('YYYYMMDDHHmm'));  
-const data = ref<LedStatusRow[]>([]);
-const loading = ref(false);
+const dataLed = ref<LedStatusRow[]>([]);
+const loadingLed = ref(false);
 const Count0=ref(0);
 const Count1=ref(0);
 const Count2=ref(0);
@@ -44,12 +51,12 @@ let timeTimer: number | null = null
 
 //接口：LED状态
 const query = async () => {
-  loading.value = true;
+  loadingLed.value = true;
   try {
-    const res = await LedStatus(scadano.value); 
+    const res = await GetLedStatus(scadano.value); 
     if (res.data.success) {
-      data.value = res.data.data;          
-      console.log(res.data.data);     
+      dataLed.value = res.data.data;          
+       
       Count0.value = res.data.data.filter(item => item.LedStatus == '-1').length;
       Count1.value = res.data.data.filter(item => item.LedStatus == '1').length;
       Count2.value = res.data.data.filter(item => item.LedStatus == '2').length;
@@ -65,12 +72,13 @@ const query = async () => {
     alert('网络错误');
     console.error(e);
   } finally {
-    loading.value = false;
+    loadingLed.value = false;
   }
 };  
 
 
 // 产量统计相关
+const loadingSum = ref(false);
 const DayT1 = ref(dayjs(now.value).format('YYYYMMDD')+'0000');
 const DayT2 = ref(dayjs(now.value).add(1,'day').format('YYYYMMDD')+'0000');
 const LastT1 = ref(shiftInfo.LastT1);
@@ -79,11 +87,11 @@ const ThisT1 = ref(shiftInfo.ThisT1);
 const ThisT2 = ref(shiftInfo.ThisT2);
 
 //接口：各个班产量相关
-const dataSum = ref<Sum1FRow[]>([]);  
+const dataSum = ref<SumRow[]>([]);  
 const querySum = async () => {
-  loading.value = true;
+  loadingSum.value = true;
   try {
-    const res = await Sum1F(DayT1.value,DayT2.value,LastT1.value,LastT2.value,ThisT1.value,ThisT2.value); 
+    const res = await PostSum(DayT1.value,DayT2.value,LastT1.value,LastT2.value,ThisT1.value,ThisT2.value); 
     if (res.data.success) {
       dataSum.value = res.data.data;           
     } else {
@@ -93,7 +101,7 @@ const querySum = async () => {
     alert('网络错误');
     console.error(e);
   } finally {
-    loading.value = false;
+    loadingSum.value = false;
   }
 };  
 
@@ -103,13 +111,97 @@ const querySum = async () => {
 const dialogVisible = ref(false)
 const currentMachineNO = ref('') // 存储当前点击的设备编号
 const machineDetail = ref<any>(null) // 后续存储设备详情
+const dataMachineInfo = ref<MachineInfoRow[]>([]);  
+const dataNewScada = ref<NewsSadaRow[]>([]);  
+
 
 // 图片点击事件：赋值设备编号并打开弹窗
-const handleImgClick = (machineNO: string) => {
-  currentMachineNO.value = machineNO
-  machineDetail.value = null // 重置详情数据
-  dialogVisible.value = true // 打开弹窗
+const handleImgClick = async (machineNO: string) => {
+    
+    await queryMachineInfo(machineNO);
+    await queryNewScada(machineNO);
+    await queryMachineHoursSum(machineNO);
+    currentMachineNO.value = machineNO
+    machineDetail.value = null // 重置详情数据
+    dialogVisible.value = true // 打开弹窗   
+
   }
+
+   //接口：机台信息
+    const queryMachineInfo =  async (machineNO: string) => {      
+      try {
+        const res = await GetMachineInfo(machineNO); 
+        if (res.data.success) {
+          dataMachineInfo.value = res.data.data;  
+        } else {
+          alert('查询失败');
+        }
+      } catch (e) {
+        alert('网络错误');
+        console.error(e);
+      } finally {       
+      }
+    };
+
+    //接口：最近一次采集记录
+    const queryNewScada =  async (machineNO: string) => {      
+      try {
+        const res = await GetNewScada(machineNO); 
+        if (res.data.success) {
+          dataNewScada.value = res.data.data;  
+        } else {
+          alert('查询失败');
+        }
+      } catch (e) {
+        alert('网络错误');
+        console.error(e);
+      } finally {       
+      }
+    };
+
+    //接口：时间段产量明细 
+    const dataMachineHoursSum1 = ref<MachineHoursSumRow[]>([]);  
+    const dataMachineHoursSum2 = ref<MachineHoursSumRow[]>([]);
+    const sumMachineHours1 = ref(0); // res1 数据总和
+    const sumMachineHours2 = ref(0); // res2 数据总和  
+
+      const queryMachineHoursSum= async (machineNO: string) => {   
+        now.value = Date.now()
+        scadano.value = dayjs(now.value).format('YYYYMMDDHHmm')
+        const newShiftInfo = getShiftInfo(dayjs(now.value).format('YYYY-MM-DD HH:mm:ss'))     
+        try {
+          const res1 = await PostMachineHoursSum(machineNO,newShiftInfo.LastT1,newShiftInfo.LastT2); 
+          const res2 = await PostMachineHoursSum(machineNO,newShiftInfo.ThisT1,newShiftInfo.ThisT2); 
+          if (res1.data.success&&res1.data.success) {
+
+            dataMachineHoursSum1.value=res1.data.data;
+            dataMachineHoursSum2.value=res2.data.data;
+            sumMachineHours1.value = calculateWkcntrSum(res1.data.data);
+             sumMachineHours2.value = calculateWkcntrSum(res2.data.data);
+
+
+          } else {
+            alert('查询失败');
+          }
+        } catch (e) {
+          alert('网络错误');
+          console.error(e);
+        } finally {
+          loadingSum.value = false;
+        }
+      };  
+
+      // 通用求和函数：计算数组中 WkcntrCount 字段的总和
+      const calculateWkcntrSum = (data: MachineHoursSumRow[]) => {
+        if (!Array.isArray(data)) return 0; // 非数组返回0
+        return data.reduce((total, item) => {
+          // 兼容：字段不存在/空值/字符串数字 → 转数字，失败则取0
+          const count = Number(item?.WkcntrCount) || 0;
+          return total + count;
+        }, 0); // 初始值0，避免空数组返回NaN
+      };
+
+
 
 
 
@@ -198,7 +290,7 @@ onUnmounted(() => {
           <div class="sc-timendjs">  </div>
         </div>    
         <ul id="sc-menu">
-          <li><router-link to="/floor1">一楼</router-link></li> 
+          <li style="background-color: cadetblue;"><router-link to="/floor1">一楼</router-link></li> 
           <li><router-link to="/floor2">二楼</router-link></li> 
           <li><router-link to="/floor3">三楼</router-link></li>         
         </ul>
@@ -282,7 +374,7 @@ onUnmounted(() => {
   <div class="sc-content"> 
     <div class="floorMsg">floorMsg</div>
     <div class="boxMachine">
-      <div class="boxitem" v-for="item in data" :key="item.MachineNO">
+      <div class="boxitem" v-for="item in dataLed" :key="item.MachineNO">
 
          <div>
           <!-- 绑定alt属性为设备编号，添加点击事件 -->
@@ -320,72 +412,37 @@ onUnmounted(() => {
       </div>
       <div class="modal-body">
         <p>设备名称：{{ currentMachineNO }} </p>
-        <p>设备地址：192.168.6.13 </p>
-        <p>最后一次采集在：2025-12-18 23:45:22</p>
-        <p>设备状态：<span class="sc-ledradius LedStatus1">绿灯</span></p>
-        <p>设备计数：12563</p>
+        <p>设备地址：{{dataMachineInfo[0]?.IpAddr}} </p>
+        <p>最后一次采集在：{{dataNewScada[0]?.CreateTime}}</p>
+        <p style="padding-left: 110px;">设备状态：<span class="sc-ledradius "  :class="`LedStatus${dataNewScada[0]?.LedStatus}`">
+                {{ 
+                  dataNewScada[0]?.LedStatus == "-1" ? '通讯异常' :
+                  dataNewScada[0]?.LedStatus == "1" ? '绿灯' :
+                  dataNewScada[0]?.LedStatus == "2" ? '黄灯' :
+                  dataNewScada[0]?.LedStatus == "3" ? '红灯' : '绿灯'
+                }}
+        </span></p>
+        <p style="padding-left: 110px;">设备计数：{{dataNewScada[0]?.WkcntrNum}}</p>
          <p><br/></p>
-        <p>上一班（白班）：12563</p>
-        <p>当前班（夜班）：12563</p>
+        <p>上一班（{{shiftInfo.LastShift}}）：{{ sumMachineHours1 }}</p>
+        <p>当前班（{{shiftInfo.ThisShift}}）：{{ sumMachineHours2 }}</p>
         <table class="sc-OneMachineDetail">
           <tbody>
             <tr class="sc-lastTime">
-              <td>20点</td>
-              <td>19点</td>
-              <td>18点</td>
-              <td>17点</td>
-              <td>16点</td>
-              <td>15点</td>
-              <td>14点</td>
-              <td>13点</td>
-              <td>12点</td>
-              <td>10点</td>
-              <td>09点</td>
-              <td>08点</td>
+               <td v-for="item in dataMachineHoursSum1">{{item.ScadaNO.slice(-2) }}点</td>             
             </tr>
             <tr>
-              <td>12</td>
-              <td>22</td>
-              <td>31</td>
-              <td>10</td>
-              <td>5</td>
-              <td>23</td>
-              <td>12</td>
-              <td>22</td>
-              <td>31</td>
-              <td>10</td>
-              <td>5</td>
-              <td>23</td>
+              <td v-for="item in dataMachineHoursSum1">{{ item.WkcntrCount }}</td>       
             </tr>
             <tr class="sc-thisTime">
-              <td>07点</td>
-              <td>06点</td>
-              <td>05点</td>
-              <td>04点</td>
-              <td>03点</td>
-              <td>02点</td>
-              <td>01点</td>
-              <td>00点</td>
-              <td>23点</td>
-              <td>22点</td>
-              <td>21点</td>
-              <td>20点</td>
+             <td v-for="item in dataMachineHoursSum2">{{item.ScadaNO.slice(-2) }}点</td>
             </tr>
             <tr>
-              <td>12</td>
-              <td>33</td>
-              <td>45</td>
-              <td>10</td>
-              <td>8</td>
-              <td>19</td>
-              <td>12</td>
-              <td>33</td>
-              <td>45</td>
-              <td>10</td>
-              <td>8</td>
-              <td>19</td>
+             <td v-for="item in dataMachineHoursSum2">{{ item.WkcntrCount }}</td>  
             </tr>
+            <div style="color: red; width: 100%;">→ </div>
           </tbody>
+         
         </table>
        
          
@@ -539,10 +596,11 @@ onUnmounted(() => {
   .sc-SumShift1{  height: 100%; padding: 5px;text-align: center; font-size: x-large;border:1px solid #67cde7;}
   .sc-SumShift2{  height: 100%;padding: 5px;text-align: center;font-size: x-large;border:1px solid #67cde7;}
 
-  .LedStatus0{background-color: darkgray;}
+  .LedStatus-1{background-color: grey;}
   .LedStatus1{background-color: green;}
   .LedStatus2{background-color: yellow;color: black;}
   .LedStatus3{background-color: red;}
+  .LedStatus4{background-color: green;}
 
 
   .sc-jjss{font-size: 18px;color:beige;}
@@ -636,11 +694,11 @@ onUnmounted(() => {
     word-wrap: break-word;
     word-break: break-all;
     text-align: center;     
-    border: 1px solid #00CCFF;
+    border: 1px solid #767c80;
 }
 
-.sc-lastTime td{background-color: aquamarine;}
-.sc-thisTime td{background-color: aquamarine;}
+.sc-lastTime td{background-color:rgb(218, 215, 215);}
+.sc-thisTime td{background-color: rgb(218, 215, 215);}
 
 
 .modal-footer {
