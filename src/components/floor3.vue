@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, computed } from 'vue'
 
+const ScadaName="三楼走心机数字看板"
+import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { GetLedStatus, type LedStatusRow } from '@/api/GetLed3F';
 import { PostSum, type SumRow } from '@/api/GetSum3F';
 import { GetMachineInfo,type MachineInfoRow } from '@/api/MachineInfo3F';
@@ -50,13 +51,15 @@ let timeTimer: number | null = null
 
 
 //接口：LED状态
+const tdCount=ref(0);
 const query = async () => {
   loadingLed.value = true;
   try {
     const res = await GetLedStatus(scadano.value); 
     if (res.data.success) {
-      dataLed.value = res.data.data;          
-       
+      dataLed.value = res.data.data;    
+      
+       tdCount.value= res.data.data[0]?.tdCount??0; 
       Count0.value = res.data.data.filter(item => item.LedStatus == '-1').length;
       Count1.value = res.data.data.filter(item => item.LedStatus == '1').length;
       Count2.value = res.data.data.filter(item => item.LedStatus == '2').length;
@@ -282,7 +285,7 @@ onUnmounted(() => {
 
     <div class="sc-left">
         <div class="sc-time">
-          <div class="sc-tiemtitle">一楼CNC加工中心</div>
+          <div class="sc-tiemtitle">{{ScadaName}}</div>
           <div class="sc-timenow">
             <div class="sc-datetime">{{ time }}</div>
             <div class="sc-dayandweek">{{ date }}  {{ week }}</div>
@@ -372,25 +375,40 @@ onUnmounted(() => {
     </div> 
   </div>   
   <div class="sc-content"> 
+
     <div class="floorMsg">floorMsg</div>
+
+
     <div class="boxMachine">
-      <div class="boxitem" v-for="item in dataLed" :key="item.MachineNO">
+      
+        <table class="sc-boxtable">
+          <tbody>
+            <tr v-for="m in dataLed[0]?.trCount">
+              <td v-for="n in dataLed[0]?.tdCount">
 
-         <div>
-          <!-- 绑定alt属性为设备编号，添加点击事件 -->
-          <img
-            src="../assets/CNC80.png"
-            class="sc-MachineImg"
-            :alt="item.MachineNO"
-            @click="handleImgClick(item.MachineNO)"
-          />
-        </div> 
-        <div class="MachineName" :class="`LedStatus${item.LedStatus}` ">{{item.MachineNO}}</div>
+                   <div v-if="dataLed.filter(item => item.colIndex ==(m-1)*tdCount+n).length>0"> <img src="../assets/zxj.png" 
+                    class="sc-MachineImg"  
+                    @click="handleImgClick(dataLed.filter(item => item.colIndex ==(m-1)*tdCount+n)[0]?.MachineNO??'')" /></div> 
+                    <div v-else></div>
 
 
+                  <div class="MachineName" 
+                      :class="`LedStatus${dataLed.filter(item => item.colIndex ==(m-1)*tdCount+n)[0]?.LedStatus}` ">
+                      {{dataLed.filter(item => item.colIndex ==(m-1)*tdCount+n)[0]?.MachineNO}}</div> 
 
-      </div>
+            
+                
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+
+
+
     </div>
+
+
   </div>
 
 
@@ -440,7 +458,7 @@ onUnmounted(() => {
             <tr>
              <td v-for="item in dataMachineHoursSum2">{{ item.WkcntrCount }}</td>  
             </tr>
-            <div style="color: red; width: 100%;">→ </div>
+          
           </tbody>
          
         </table>
@@ -519,6 +537,50 @@ onUnmounted(() => {
     margin: 0;        
     padding: 0;
   }
+
+
+.sc-boxtable{
+  border-collapse: collapse; 
+  width: 100%;
+}
+.sc-boxtable td{
+  padding:0.5rem 1.5rem;
+  min-width: 42px;
+  min-height: 42px;
+  text-align: center;
+}
+
+ .sc-MachineImg{
+   width: 70px;
+   height: 42px;
+     cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+
+.sc-boxMachine .MachineImg{width: 42px;}
+.sc-boxMachine .MachineName{width: 42px;
+  background-color: #213547;
+  color: white; 
+  border-radius: 5px;
+  font-size: 18px; 
+   text-align: center;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   .sc-right{
     display: flex;
     display: -webkit-flex;
@@ -606,12 +668,7 @@ onUnmounted(() => {
   .sc-jjss{font-size: 18px;color:beige;}
   .sc-jjss span{font-weight: bold;color: chartreuse;}
 
-  .sc-MachineImg{
-     cursor: pointer;
-    transition: transform 0.2s ease;
-  }
-
-
+ 
 
 
 

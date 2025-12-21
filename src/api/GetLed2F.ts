@@ -1,13 +1,13 @@
-import axios from 'axios';
-export const api = axios.create({
-  baseURL: 'http://192.168.99.32:3000/api',
-  timeout: 10000,
-});
+
+import {api} from './apiconfig';
 
 
 export interface LedStatusRow {
   MachineNO: string;
   LedStatus: string;
+  trCount:number;
+  tdCount:number;
+  colIndex:number;
 }
 export const GetLedStatus = (scadano: string) => 
   api.get<{ success: boolean; data: LedStatusRow[] }>(`/GetLed2F/${scadano}`); // 拼接路由参数，最终 URL：/GetLed1F/xxx

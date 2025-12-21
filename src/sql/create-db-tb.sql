@@ -3,7 +3,6 @@ CREATE DATABASE IF NOT EXISTS db_ScadaBrother
 CHARACTER SET = UTF8MB4 
 COLLATE = UTF8MB4_GENERAL_CI;
 
-
 CREATE TABLE IF NOT EXISTS t_Machine(
 	MachineID INT  NOT NULL  PRIMARY KEY AUTO_INCREMENT ,
 	MachineNO VARCHAR(50) NOT NULL UNIQUE KEY ,
@@ -14,9 +13,6 @@ CREATE TABLE IF NOT EXISTS t_Machine(
 	MachineStatus INT NOT NULL DEFAULT 1 ,
 	OrderBy INT DEFAULT 1  
 )ENGINE=INNODB  DEFAULT CHARSET=UTF8MB4  COLLATE=UTF8MB4_GENERAL_CI ;
-
-
-
 
 CREATE TABLE IF NOT EXISTS t_scadadata(
 	ScadaID BIGINT  NOT NULL PRIMARY KEY AUTO_INCREMENT ,
@@ -32,13 +28,8 @@ CREATE TABLE IF NOT EXISTS t_scadadata(
 	FOREIGN KEY (MachineID) REFERENCES t_Machine (MachineID)
 )ENGINE=INNODB  DEFAULT CHARSET=UTF8MB4  COLLATE=UTF8MB4_GENERAL_CI ;
 
-
-SELECT * FROM t_machine;
-SELECT * FROM t_scadadata;
-
-INSERT INTO (MachineID,ScadaNO,WkcntrNum,WkcntrCount,LedStatus)VALUES (1,'',1521,10,1);
 ---------------------------------------------------------------------------------------
-
+---------------------------------------------------------------------------------------
 
 CREATE DATABASE IF NOT EXISTS db_ScadaFANUC 
 CHARACTER SET = UTF8MB4 
@@ -72,12 +63,8 @@ CREATE TABLE IF NOT EXISTS t_scadadata(
 	FOREIGN KEY (MachineID) REFERENCES t_Machine (MachineID)
 )ENGINE=INNODB  DEFAULT CHARSET=UTF8MB4  COLLATE=UTF8MB4_GENERAL_CI ;
 
-
-SELECT * FROM t_machine;
-SELECT * FROM t_scadadata;
 -----------------------------------------------------------------------------------
-
-
+-----------------------------------------------------------------------------------
 
 CREATE DATABASE IF NOT EXISTS db_ScadaSYNTEC
 CHARACTER SET = UTF8MB4 
@@ -111,8 +98,14 @@ CREATE TABLE IF NOT EXISTS t_scadadata(
 	FOREIGN KEY (MachineID) REFERENCES t_Machine (MachineID)
 )ENGINE=INNODB  DEFAULT CHARSET=UTF8MB4  COLLATE=UTF8MB4_GENERAL_CI ;
 
+---------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------
 
-
+ALTER TABLE t_Machine ADD trCount INT;
+ALTER TABLE t_Machine ADD tdCount INT;
+ALTER TABLE t_Machine ADD colIndex INT;
+UPDATE t_machine SET trCount=21,tdCount=8 WHERE 1=1
+UPDATE t_machine SET colIndex=MachineID WHERE 1=1
 
 
 

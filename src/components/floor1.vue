@@ -50,13 +50,15 @@ let timeTimer: number | null = null
 
 
 //接口：LED状态
+const tdCount=ref(0);
 const query = async () => {
   loadingLed.value = true;
   try {
     const res = await GetLedStatus(scadano.value); 
     if (res.data.success) {
-      dataLed.value = res.data.data;          
-       
+      dataLed.value = res.data.data;    
+      
+       tdCount.value= res.data.data[0]?.tdCount??0; 
       Count0.value = res.data.data.filter(item => item.LedStatus == '-1').length;
       Count1.value = res.data.data.filter(item => item.LedStatus == '1').length;
       Count2.value = res.data.data.filter(item => item.LedStatus == '2').length;
@@ -372,25 +374,40 @@ onUnmounted(() => {
     </div> 
   </div>   
   <div class="sc-content"> 
+
     <div class="floorMsg">floorMsg</div>
+
+
     <div class="boxMachine">
-      <div class="boxitem" v-for="item in dataLed" :key="item.MachineNO">
+      
+        <table class="sc-boxtable">
+          <tbody>
+            <tr v-for="m in dataLed[0]?.trCount">
+              <td v-for="n in dataLed[0]?.tdCount">
 
-         <div>
-          <!-- 绑定alt属性为设备编号，添加点击事件 -->
-          <img
-            src="../assets/CNC80.png"
-            class="sc-MachineImg"
-            :alt="item.MachineNO"
-            @click="handleImgClick(item.MachineNO)"
-          />
-        </div> 
-        <div class="MachineName" :class="`LedStatus${item.LedStatus}` ">{{item.MachineNO}}</div>
+                   <div v-if="dataLed.filter(item => item.colIndex ==(m-1)*tdCount+n).length>0"> <img src="../assets/CNC60.png" 
+                    class="sc-MachineImg"  
+                    @click="handleImgClick(dataLed.filter(item => item.colIndex ==(m-1)*tdCount+n)[0]?.MachineNO??'')" /></div> 
+                    <div v-else></div>
 
 
+                  <div class="MachineName" 
+                      :class="`LedStatus${dataLed.filter(item => item.colIndex ==(m-1)*tdCount+n)[0]?.LedStatus}` ">
+                      {{dataLed.filter(item => item.colIndex ==(m-1)*tdCount+n)[0]?.MachineNO}}</div> 
 
-      </div>
+            
+                
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+
+
+
     </div>
+
+
   </div>
 
 
@@ -440,7 +457,7 @@ onUnmounted(() => {
             <tr>
              <td v-for="item in dataMachineHoursSum2">{{ item.WkcntrCount }}</td>  
             </tr>
-            <div style="color: red; width: 100%;">→ </div>
+          
           </tbody>
          
         </table>
@@ -519,6 +536,51 @@ onUnmounted(() => {
     margin: 0;        
     padding: 0;
   }
+
+
+.sc-boxtable{
+  border-collapse: collapse; 
+  width: 100%;
+}
+.sc-boxtable td{
+  padding: 0.3rem 1.5rem;
+  min-width: 28px;
+  min-height: 28px;
+  text-align: center;
+}
+
+ .sc-MachineImg{
+   width: 65x;
+   height: 65px;
+   cursor: pointer;
+   transition: transform 0.2s ease;
+  }
+
+.sc-boxMachine .MachineImg{width: 28px;}
+.sc-boxMachine .MachineName{
+  width: 28px;
+  background-color: #213547;
+  color: white; border-radius: 5px;
+  font-size: x-small;  
+  text-align: center;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   .sc-right{
     display: flex;
     display: -webkit-flex;
@@ -606,12 +668,7 @@ onUnmounted(() => {
   .sc-jjss{font-size: 18px;color:beige;}
   .sc-jjss span{font-weight: bold;color: chartreuse;}
 
-  .sc-MachineImg{
-     cursor: pointer;
-    transition: transform 0.2s ease;
-  }
-
-
+ 
 
 
 
