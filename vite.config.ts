@@ -9,6 +9,11 @@ export default defineConfig({
   plugins: [vue()],
 //------------------------------
   server: {
+    allowedHosts: [
+  'shinewaygroup.com', 
+  'scada.shinewaygroup.com',
+  'api.shinewaygroup.com'
+],
       host: '0.0.0.0', // 监听所有地址
       port: 5173, // 端口号（可选，默认5173）
       open: false, // 是否自动打开浏览器（可选）

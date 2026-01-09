@@ -317,14 +317,14 @@ onUnmounted(() => {
               <td><div class="sc-MachineIco"><img src="../assets/CNC40.png"/></div></td>
               <td><div class="sc-LedStr">黄  灯</div></td>
               <td><div class="sc-LedSum">{{Count2}}台</div></td>
-              <td><div class="sc-LedPercentage"><span class="sc-Percentage">{{ calcPercentage(Count2, CountAll) }}%</span></div></td>
+              <td><div class="sc-LedPercentage"><span class="sc-Percentage">{{ calcPercentage(Count2, CountAll) }}</span></div></td>
             </tr>
             <tr>
               <td><div class="sc-LedIco"><img src="../assets/redLED.png"/></div></td>
               <td><div class="sc-MachineIco"><img src="../assets/CNC40.png"/></div></td>
               <td><div class="sc-LedStr">红  灯</div></td>
               <td><div class="sc-LedSum">{{Count3}}台</div></td>
-              <td><div class="sc-LedPercentage"><span class="sc-Percentage">{{ calcPercentage(Count3, CountAll) }}%</span></div></td>
+              <td><div class="sc-LedPercentage"><span class="sc-Percentage">{{ calcPercentage(Count3, CountAll) }}</span></div></td>
             </tr>
             <tr>
               <td><div class="sc-LedIco"><img src="../assets/errorLED.png"/></div></td>
@@ -428,7 +428,8 @@ onUnmounted(() => {
         <button class="close-btn" @click="dialogVisible = false">×</button>
       </div>
       <div class="modal-body">
-        <p>设备名称：{{ currentMachineNO }} </p>
+        <p>设备名称：{{ dataMachineInfo[0]?.MachineDetail }} </p>
+        <p>出厂日期：{{dayjs( dataMachineInfo[0]?.MachineDateOut).format('YYYY年MM月')??"" }} </p>
         <p>设备地址：{{dataMachineInfo[0]?.IpAddr}} </p>
         <p>最后一次采集在：{{dataNewScada[0]?.CreateTime}}</p>
         <p style="padding-left: 110px;">设备状态：<span class="sc-ledradius "  :class="`LedStatus${dataNewScada[0]?.LedStatus}`">
@@ -440,6 +441,7 @@ onUnmounted(() => {
                 }}
         </span></p>
         <p style="padding-left: 110px;">设备计数：{{dataNewScada[0]?.WkcntrNum}}</p>
+        <p style="padding-left: 110px;">当前生产：{{dataMachineInfo[0]?.tempItem}}</p>
          <p><br/></p>
         <p>上一班（{{shiftInfo.LastShift}}）：{{ sumMachineHours1 }}</p>
         <p>当前班（{{shiftInfo.ThisShift}}）：{{ sumMachineHours2 }}</p>

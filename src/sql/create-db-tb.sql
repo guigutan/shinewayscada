@@ -109,6 +109,11 @@ UPDATE t_machine SET colIndex=MachineID WHERE 1=1
 
 
 
+ALTER TABLE t_machine ADD MachineModel VARCHAR(255);
+ALTER TABLE t_machine ADD MachineDetail VARCHAR(500);
+ALTER TABLE t_machine ADD MachineDateOut date;
+ALTER TABLE t_machine ADD tempItem VARCHAR(255);
+
 
 
 
