@@ -24,9 +24,9 @@ export function getShiftInfo(currentTime: string): ShiftInfo {
   }
 
   // 获取时间组件
-  const year = time.getFullYear();
-  const month = time.getMonth() + 1; // 月份从 0 开始，需 +1
-  const day = time.getDate();
+  // const year = time.getFullYear();
+  // const month = time.getMonth() + 1; // 月份从 0 开始，需 +1
+  // const day = time.getDate();
   const hours = time.getHours();
 
   // 格式化日期为 YYYYMMDD 格式（补零）

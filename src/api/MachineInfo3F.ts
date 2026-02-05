@@ -7,10 +7,15 @@ export interface MachineInfoRow {
   MachineNO: string;
   MachineName: string;
   MachineStype: string;
+
   IpAddr: string;
   PortNum: string;
   MachineStatus: string;
   OrderBy: string;
+  MachineDetail: string;
+  MachineDateOut: Date;
+  tempItem: string;
+    
 }
 export const GetMachineInfo = (MachineNO: string) => 
   api.get<{ success: boolean; data: MachineInfoRow[] }>(`/GetMachine3F/${MachineNO}`); 

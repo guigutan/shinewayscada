@@ -13,7 +13,7 @@ const week = computed(() => {
 
 // 2. 60秒倒计时相关
 const countdown = ref(60)
-const countdownText = computed(() => countdown.value.toString().padStart(2, '0'))
+//const countdownText = computed(() => countdown.value.toString().padStart(2, '0'))
 
 // 定时器管理
 let timeTimer: number | null = null
@@ -34,10 +34,10 @@ const startCountdown = () => {
 }
 
 // 重置倒计时
-const resetCountdown = () => {
-  countdown.value = 60
-  startCountdown()
-}
+// const resetCountdown = () => {
+//   countdown.value = 60
+//   startCountdown()
+// }
 
 // 生命周期
 onMounted(() => {
