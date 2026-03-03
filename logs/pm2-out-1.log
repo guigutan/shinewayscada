@@ -1,0 +1,26 @@
+2026-03-03 11:57:05:  INFO  Accepting connections at http://localhost:8080
+2026-03-03 11:57:37:  HTTP  2026/3/3 11:57:37 ::1 GET /
+2026-03-03 11:57:37:  HTTP  2026/3/3 11:57:37 ::1 Returned 200 in 19 ms
+2026-03-03 11:57:37:  HTTP  2026/3/3 11:57:37 ::1 GET /assets/index-CN3_KrBP.js
+2026-03-03 11:57:37:  HTTP  2026/3/3 11:57:37 ::1 GET /assets/index-B3kmAviy.css
+2026-03-03 11:57:37:  HTTP  2026/3/3 11:57:37 ::1 Returned 200 in 5 ms
+2026-03-03 11:57:37:  HTTP  2026/3/3 11:57:37 ::1 Returned 200 in 15 ms
+2026-03-03 11:57:38:  HTTP  2026/3/3 11:57:38 ::1 GET /assets/greenLED-DH0bPuMR.png
+2026-03-03 11:57:38:  HTTP  2026/3/3 11:57:38 ::1 GET /assets/CNC40-C3nADkaN.png
+2026-03-03 11:57:38:  HTTP  2026/3/3 11:57:38 ::1 GET /assets/redLED-BIur-iy4.png
+2026-03-03 11:57:38:  HTTP  2026/3/3 11:57:38 ::1 GET /assets/yellowLED-DzaR1q_X.png
+2026-03-03 11:57:38:  HTTP  2026/3/3 11:57:38 ::1 GET /assets/errorLED-owHYX-79.png
+2026-03-03 11:57:38:  HTTP  2026/3/3 11:57:38 ::1 Returned 200 in 6 ms
+2026-03-03 11:57:38:  HTTP  2026/3/3 11:57:38 ::1 Returned 200 in 6 ms
+2026-03-03 11:57:38:  HTTP  2026/3/3 11:57:38 ::1 Returned 200 in 6 ms
+2026-03-03 11:57:38:  HTTP  2026/3/3 11:57:38 ::1 Returned 200 in 5 ms
+2026-03-03 11:57:38:  HTTP  2026/3/3 11:57:38 ::1 Returned 200 in 4 ms
+2026-03-03 11:57:38:  HTTP  2026/3/3 11:57:38 ::1 GET /vite.svg
+2026-03-03 11:57:38:  HTTP  2026/3/3 11:57:38 ::1 Returned 200 in 2 ms
+2026-03-03 11:57:38:  HTTP  2026/3/3 11:57:38 ::1 GET /vite.svg
+2026-03-03 11:57:38:  HTTP  2026/3/3 11:57:38 ::1 Returned 304 in 2 ms
+2026-03-03 11:57:39:  HTTP  2026/3/3 11:57:39 ::1 GET /assets/CNC60-DwAFapiz.png
+2026-03-03 11:57:39:  HTTP  2026/3/3 11:57:39 ::1 Returned 200 in 1 ms
+2026-03-03 12:01:08:  INFO  Accepting connections at http://localhost:8080
+2026-03-03 12:02:19:  INFO  Accepting connections at http://localhost:5173
+2026-03-03 13:36:51:  INFO  Accepting connections at http://localhost:5173
