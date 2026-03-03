@@ -1,4 +1,4 @@
-//service-create.cjs（CommonJS 版本，显示所有可访问地址）
+//service-uninstall.cjs（CommonJS 版本，显示所有可访问地址）
 const Service = require('node-windows').Service;
 const path = require('path');
 const fs = require('fs');
@@ -85,7 +85,7 @@ const scriptPath = path.resolve(__dirname, 'service-start.cjs');
 // 创建 Windows 服务对象
 const svc = new Service({
   name: 'ShinewayScada',
-  description: 'ShinewayScada Vite Preview Service (无窗口后台运行)',
+  description: '兴晖看板前端服务',
   script: scriptPath,
   nodeOptions: ['--harmony'],
   silent: true,
@@ -120,6 +120,6 @@ svc.on('uninstall', () => {
   console.log('✅ 服务已卸载！');
 });
 
-// 执行安装（卸载时改为 svc.uninstall()）
-svc.install();
-//svc.uninstall();
+
+//卸载
+svc.uninstall();
