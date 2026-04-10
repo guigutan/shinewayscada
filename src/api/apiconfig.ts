@@ -1,7 +1,24 @@
+//apiconfig.ts
+
 import axios from 'axios';
-export const api = axios.create({ 
-  //baseURL: 'http://192.168.99.32:3000/api', 
-  baseURL: 'http://api.shinewaygroup.com:8000/api',
-  timeout: 10000,
+export const api = axios.create({
+  baseURL: 'http://61.142.21.100:7002/',
+  headers: {
+    'Authorization': 'Bearer 0FjWJVIqasEtwEapFx1owqe0R119WUgY',
+    'Content-Type': 'application/json',
+  },
+  timeout: 3000,
 });
+
+//推荐的 deep 参数（尤其当过滤比较复杂时） limit要>=10 
+/* 
+    http://61.142.21.100:7002/items/t_scadadata?access_token=0FjWJVIqasEtwEapFx1owqe0R119WUgY
+    &fields=*,MachineID.*
+    &filter[ScadaNO][_eq]=202604090925
+    &limit=10
+    &deep[MachineID][_filter][Stype][_eq]=M80
+*/
+
+//受限用户：0FjWJVIqasEtwEapFx1owqe0R119WUgY
+//管理员：1RB5Yf-d00etRXxnWH4cA494Hsx0T0we
 
