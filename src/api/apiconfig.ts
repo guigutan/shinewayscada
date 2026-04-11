@@ -20,7 +20,7 @@ async function getBestBaseURL() {
     console.log('✅ 内网连通，使用局域网接口');
     return INTERNAL_URL;
   } catch (e) {
-    console.log('❌ 内网不可达，使用公网接口');
+    console.log('❌ 内网不可达，已改用公网接口');
     return EXTERNAL_URL;
   }
 }
@@ -32,7 +32,7 @@ export const api = axios.create({
     'Authorization': 'Bearer 0FjWJVIqasEtwEapFx1owqe0R119WUgY', //受限用户：0FjWJVIqasEtwEapFx1owqe0R119WUgY
     'Content-Type': 'application/json',
   },
-  timeout: 5000,
+  timeout: 1000,
 });
 
 

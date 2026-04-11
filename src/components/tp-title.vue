@@ -16,6 +16,9 @@ const { title = '标题', loading = false } = defineProps<{
   font-size: 24px;
   font-weight: bold;
   margin: 20px 0;
+
+  color: #fff;
+  text-align: center;
 }
 .loading {
   color: #666;

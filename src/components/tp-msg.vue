@@ -14,4 +14,16 @@
         
 </script>
 
-<style scoped></style>
+<style scoped>
+
+.floorMsg{
+    background-color: rgb(56, 117, 141);
+    height: 40px;
+    line-height: 40px;
+    padding: 0 5px;   
+
+    border-radius: 5px;
+
+}
+
+</style>

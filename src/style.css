@@ -81,36 +81,18 @@ button:focus-visible {
   }
 }
 
-
-
-
-
-.floorMsg{
-  background-color: rgba(249, 213, 171, 0.1);
-  color: darksalmon;
-  padding: 5px;
+/*------------------------------------------------------------------------------------*/
+.floorRow1{
+  display: -webkit-flex; /* Safari */
+  display: flex;
+  justify-content:  space-between ;
 }
-
-
-.boxMachine{  
-    margin: 0;
-    padding: 1rem;
-    display: flex;
-    display: -webkit-flex;     
-    flex-wrap: nowrap;
-    justify-content: center;
-    height: 1400px; 
-    overflow-y: auto; 
-    overflow-x: hidden;
+.floorRow2{
+  margin-top: 20px;
 }
-
-.boxitem{ margin: 20px;}
-.boxMachine .MachineImg{width: 80px;}
-.boxMachine .MachineName{width: 80px;background-color: #213547;color: white; border-radius: 5px;font-size: x-large;  text-align: center;}
-
-
-
-
+.floorRow3{
+  margin-top: 20px;
+}
 
 
 

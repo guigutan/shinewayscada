@@ -1,23 +1,38 @@
 <template>
   <ul id="sc-menu">
-    <li :class="{ active: currentPath === '/floor1' }">
+    <li :class="{ active: myData.currentPath === '/floor1' }">
       <router-link to="/floor1">一楼</router-link>
     </li>
-    <li :class="{ active: currentPath === '/floor2' }">
+    <li :class="{ active: myData.currentPath === '/floor2' }">
       <router-link to="/floor2">二楼</router-link>
     </li>
-    <li :class="{ active: currentPath === '/floor3' }">
+    <li :class="{ active: myData.currentPath === '/floor3' }">
       <router-link to="/floor3">三楼</router-link>
     </li>
   </ul>
 </template>
 
 <script setup lang="ts">
-// 接收父页面传入当前路由
-interface Props {
-  currentPath: string
-}
-defineProps<Props>()
+
+   import { computed } from 'vue'    
+    interface Props {
+        currentPath: string        
+    }
+    const myProps = defineProps<Props>()
+
+    interface InfoData {
+      currentPath: string      
+    }
+
+
+    const myData = computed(() => {
+          const info: InfoData = {
+                currentPath: myProps.currentPath               
+          }
+          return info
+    })
+
+
 </script>
 
 <style scoped>
@@ -26,6 +41,8 @@ defineProps<Props>()
   list-style: none;
   padding: 0;
   gap: 10px;
+
+  margin-top: 50px;
 }
 #sc-menu li {
   padding: 6px 24px;
