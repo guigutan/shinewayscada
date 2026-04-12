@@ -1,3 +1,6 @@
+<!-- src\components\tp-boxMachine.vue -->
+
+
 <template>
   <div v-if="loading">加载中...</div>
 
@@ -321,10 +324,13 @@ const myData = computed(() => {
   border-collapse: collapse;
   width: 100%;
 }
+.sc-boxtable tr{
+    height: 60px;
+}
 .sc-boxtable td {
   padding: 0.3rem 1.5rem;
   min-width: 28px;
-  min-height: 28px;
+ 
   text-align: center;
 }
 </style>

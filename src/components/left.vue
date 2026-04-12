@@ -1,3 +1,5 @@
+<!-- src\components\left.vue -->
+
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 import dayjs from 'dayjs'

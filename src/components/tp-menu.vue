@@ -1,47 +1,41 @@
+<!-- src/components/tp-menu.vue -->
 <template>
   <ul id="sc-menu">
-    <li :class="{ active: myData.currentPath === '/floor1' }">
+    <li :class="{ active: isActive('/floor1') }">
       <router-link to="/floor1">一楼</router-link>
     </li>
-    <li :class="{ active: myData.currentPath === '/floor2' }">
+    <li :class="{ active: isActive('/floor2') }">
       <router-link to="/floor2">二楼</router-link>
     </li>
-    <li :class="{ active: myData.currentPath === '/floor3' }">
+    <li :class="{ active: isActive('/floor3') }">
       <router-link to="/floor3">三楼</router-link>
     </li>
   </ul>
 </template>
 
 <script setup lang="ts">
+import { useRoute } from 'vue-router'
 
-   import { computed } from 'vue'    
-    interface Props {
-        currentPath: string        
-    }
-    const myProps = defineProps<Props>()
+interface Props {
+  currentPath?: string
+}
 
-    interface InfoData {
-      currentPath: string      
-    }
+const props = defineProps<Props>()
+const route = useRoute()
 
-
-    const myData = computed(() => {
-          const info: InfoData = {
-                currentPath: myProps.currentPath               
-          }
-          return info
-    })
-
-
+const isActive = (target: string) => {
+  if (props.currentPath) return props.currentPath === target
+  return route.path === target
+}
 </script>
 
 <style scoped>
+/* 你的原有样式保持不变 */
 #sc-menu {
   display: flex;
   list-style: none;
   padding: 0;
   gap: 10px;
-
   margin-top: 50px;
 }
 #sc-menu li {
@@ -54,9 +48,9 @@
   text-decoration: none;
   color: inherit;
 }
-/* 自动高亮样式 */
 #sc-menu li.active {
   background-color: rgb(10, 181, 204);
   color: #fff;
+  font-weight: bold;
 }
 </style>

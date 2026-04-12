@@ -1,3 +1,5 @@
+<!-- src\components\tp-msg.vue -->
+
 <template>
 
     <div v-if="loading" >加载中...</div>

@@ -1,3 +1,5 @@
+// src\api\GetTotal.ts
+
 import { api } from './apiconfig';
 
 export interface TotalSumResult {  

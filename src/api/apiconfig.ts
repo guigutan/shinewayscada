@@ -1,4 +1,6 @@
-//apiconfig.ts
+// src\api\apiconfig.ts
+
+
 import axios from 'axios';
 
 // 自动检测：内网可达 → 用内网IP；否则 → 用公网IP

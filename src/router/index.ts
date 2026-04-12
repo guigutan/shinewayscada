@@ -1,21 +1,15 @@
+// router/index.ts
 import { createRouter, createWebHistory } from 'vue-router'
-
-import floor1 from '../components/floor1.vue'
-import floor2 from '../components/floor2.vue'
-import floor3 from '../components/floor3.vue'
 
 const router = createRouter({
   history: createWebHistory(),
   routes: [
+    { path: '/', redirect: '/floor1' },
+
     {
-      path: '/',      
-       component: floor1,
-       children: [
-        { path: '', redirect: 'floor1' }, 
-        { path: 'floor1', component: floor1, name: 'floor1' },
-        { path: 'floor2', component: floor2, name: 'floor2' },
-        { path: 'floor3', component: floor3, name: 'floor3' },    
-      ]
+      path: '/floor:floor',        // ← 注意：这里是 /floor:floor （没有斜杠）
+      component: () => import('../components/Floor.vue'),
+      name: 'floor'
     }
   ]
 })

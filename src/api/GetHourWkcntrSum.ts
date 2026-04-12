@@ -1,3 +1,5 @@
+// src\api\GetHourWkcntrSum.ts
+
 import { api } from './apiconfig';
 
 export interface HourScadaSumItem {
