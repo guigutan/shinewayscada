@@ -6,7 +6,7 @@ import axios from 'axios';
 // 自动检测：内网可达 → 用内网IP；否则 → 用公网IP
 async function getBestBaseURL() {
   const INTERNAL_URL = 'http://192.168.100.61:7002/';
-  const EXTERNAL_URL = 'http://61.142.21.100:7002/';
+  const EXTERNAL_URL = 'https://directus.shinewaygroup.com:6002/';
 
   try {
     // 尝试请求内网接口（超时极短，不卡页面）
