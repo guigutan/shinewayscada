@@ -77,7 +77,9 @@ const areaMap: Record<string, string> = {
   '3': '三楼'
 }
 
-const area = computed(() => areaMap[floorNum.value] || `${floorNum.value}楼`)
+//const area = computed(() => areaMap[floorNum.value] || `${floorNum.value}楼`)
+// 修复后代码
+const area = computed(() => areaMap[floorNum.value ?? 0] || `${floorNum.value}楼`)
 
 const title = computed(() => `${area.value}机台设备`)
 const currentPath = computed(() => `/floor${floorNum.value}`)   // 重要：传给菜单用
