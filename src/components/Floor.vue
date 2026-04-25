@@ -183,6 +183,7 @@ watch(area, (newArea) => {
 
 // ==================== 定时器（时钟 + 倒计时） ====================
 let timer: number | null = null
+let sec = new Date().getSeconds()
 
 const startTimer = () => {
   // 清除旧定时器（防止切换楼层后多个定时器并存）
@@ -191,13 +192,22 @@ const startTimer = () => {
   }
 
   timer = window.setInterval(() => {
-    refreshCountDown.value--
-    updateTime()
 
-    // 倒计时到 0 时刷新数据
-    if (refreshCountDown.value <= 0) {
-      loadAllData()
-    }
+    
+    updateTime()
+    sec = new Date().getSeconds()       
+    if (sec==30) { loadAllData() } // 到每分的30秒时刷新数据
+    
+   
+
+    
+    refreshCountDown.value = sec <= 30 ? 30 - sec : 60 - sec + 30  
+      
+      
+
+   
+
+
   }, 1000)
 }
 
