@@ -129,8 +129,8 @@ const loadAllData = async () => {
     console.log(`正在加载 ${area.value} 数据...`)   // 调试用，看控制台
 
     // 机台LED状态
-    dataListMachineLedStatus.value = await loadDataMachineLedStatus(
-      Number(dayjs(now).format('YYYYMMDDHHmm')), 
+    dataListMachineLedStatus.value = await loadDataMachineLedStatus(    
+      Number(dayjs(now).subtract(1, 'minute').format('YYYYMMDDHHmm')),  //状态 永远是获取上一分钟的状态
       area.value
     )
 
@@ -182,6 +182,8 @@ watch(area, (newArea) => {
 }, { immediate: true })
 
 // ==================== 定时器（时钟 + 倒计时） ====================
+const isSec=30;// 到每分的30秒时刷新数据
+
 let timer: number | null = null
 let sec = new Date().getSeconds()
 
@@ -196,12 +198,12 @@ const startTimer = () => {
     
     updateTime()
     sec = new Date().getSeconds()       
-    if (sec==30) { loadAllData() } // 到每分的30秒时刷新数据
+    if (sec==isSec) { loadAllData() } // 到每分的30秒时刷新数据
     
    
 
     
-    refreshCountDown.value = sec <= 30 ? 30 - sec : 60 - sec + 30  
+    refreshCountDown.value = sec <= isSec ? isSec - sec : 60 - sec + isSec 
       
       
 
