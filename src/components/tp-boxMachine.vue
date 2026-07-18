@@ -145,13 +145,18 @@ const myData = computed(() => {
           const HourScadaNOList1 = generateHourList(shiftInfo.LastT1, shiftInfo.LastT2)
           const HourScadaNOList2 = generateHourList(shiftInfo.ThisT1, shiftInfo.ThisT2)
 
-          // 提取当前页面所有机台的 ID
-          const machineIds = myData.value.sourceList.map(item => item.MachineID?.MachineID) .filter(id => id != null) as number[]
+          // 弹窗只查询当前点击机台的产量，避免显示整页机台的合计值
+          const machineId = row.MachineID?.MachineID
+          if (machineId == null) {
+                  HoursSum1.value = []
+                  HoursSum2.value = []
+                  return
+          }
           try {
-                  const res1 = await loadDataHourWkcntrSum(shiftInfo.LastT1, shiftInfo.LastT2, machineIds)                 
+                  const res1 = await loadDataHourWkcntrSum(shiftInfo.LastT1, shiftInfo.LastT2, machineId)
                   const hourMap1 = new Map();res1.forEach(item => { hourMap1.set(item.HourScadaNO, item.sum.WkcntrSum);})                 
 
-                  const res2 = await loadDataHourWkcntrSum(shiftInfo.ThisT1, shiftInfo.ThisT2, machineIds)
+                  const res2 = await loadDataHourWkcntrSum(shiftInfo.ThisT1, shiftInfo.ThisT2, machineId)
                   const hourMap2 = new Map();res2.forEach(item => { hourMap2.set(item.HourScadaNO, item.sum.WkcntrSum);}) 
                 
                   HoursSum1.value = HourScadaNOList1.map(hour => {

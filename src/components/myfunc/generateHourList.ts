@@ -23,7 +23,8 @@ export function generateHourList(start: string | number, end: string | number) {
   const list = []
 
   let current = startDay
-  while (current.isBefore(endDay) || current.isSame(endDay)) {
+  // 查询区间使用 [start, end)，结束时刻不属于当前班次
+  while (current.isBefore(endDay)) {
     // ✅ 只返回 10 位：YYYYMMDDHH
     const timeNo = current.format('YYYYMMDDHH') 
     list.push(timeNo)

@@ -12,7 +12,7 @@ export interface HourScadaSumItem {
 export async function loadDataHourWkcntrSum(
   startScadaNo: number | string,
   endScadaNo: number | string,
-  machineIds: number[]
+  machineId: number
 ) {
   try {
     const res = await api.get<{ data: HourScadaSumItem[] }>('/items/t_scadadata', {
@@ -21,7 +21,7 @@ export async function loadDataHourWkcntrSum(
         'filter[ScadaNO][_gte]': startScadaNo,
         'filter[ScadaNO][_lt]': endScadaNo,
         'filter[WkcntrSum][_gt]': 0,
-        'filter[MachineID][_in]': machineIds.join(','), // 1,2,3,4,5,6
+        'filter[MachineID][_eq]': machineId,
 
         'aggregate[sum]': 'WkcntrSum',
         'groupBy[]': 'HourScadaNO',
