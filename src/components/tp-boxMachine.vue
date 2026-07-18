@@ -16,7 +16,8 @@
               :key="item.MachineID?.MachineID"
             >
               <img 
-                src="../assets/CNC60.png" 
+                :src="getMachineImage(item)"
+                :alt="`${item.MachineID?.MachineNO ?? '机台'}图片`"
                 class="sc-MachineImg" 
                 @click="openDialog(item)" 
               />
@@ -99,11 +100,13 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { type TScadaData } from '../api/GetMachineLedStatus.ts'
+import { type TScadaData } from '../api/scada'
 import dayjs from 'dayjs'
-import { getShiftInfo } from './myfunc/getShiftInfo.ts'
-import { loadDataHourWkcntrSum, type HourScadaSumItem } from '../api/GetHourWkcntrSum.ts'
-import { generateHourList } from './myfunc/generateHourList.ts'
+import { getShiftInfo } from './myfunc/getShiftInfo'
+import { loadDataHourWkcntrSum, type HourScadaSumItem } from '../api/scada'
+import { generateHourList } from './myfunc/generateHourList'
+import cnc60Image from '../assets/CNC60.png'
+import jg60Image from '../assets/JG60.png'
 
 interface Props {
   sourceList?: TScadaData[]  
@@ -125,6 +128,14 @@ const myData = computed(() => {
   }
   return info
 })
+
+const getMachineImage = (item: TScadaData): string => {
+  const machine = item.MachineID
+  if (machine?.Area?.trim() === '一楼' && machine.Stype?.trim() === 'M80') {
+    return jg60Image
+  }
+  return cnc60Image
+}
 
 //-----------------------------------------------------------------------
 //------ 原生弹窗逻辑 ------------------

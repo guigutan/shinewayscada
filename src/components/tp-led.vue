@@ -45,7 +45,7 @@
 
 <script setup lang="ts">
     import { computed } from 'vue'   
-    import { type TScadaData } from '../api/GetMachineLedStatus.ts'
+    import { type TScadaData } from '../api/scada'
     import { calcPercentage } from  './myfunc/calcPercentage';
 
     interface Props {sourceList?: TScadaData[],loading?:boolean } 

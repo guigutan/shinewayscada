@@ -46,7 +46,7 @@ import { ref, onMounted, onUnmounted, computed, watch } from 'vue'
 import dayjs from 'dayjs'
 import { useRoute } from 'vue-router'
 
-import { getShiftInfo } from './myfunc/getShiftInfo.ts'
+import { getShiftInfo } from './myfunc/getShiftInfo'
 
 import tpTitle from '../components/tp-title.vue'
 import tpLed from '../components/tp-led.vue'
@@ -57,8 +57,12 @@ import tpBoxMachine from '../components/tp-boxMachine.vue'
 import tpTotal from '../components/tp-total.vue'
 import tpRefreshCountDown from '../components/tp-refreshCountDown.vue'
 
-import { loadDataMachineLedStatus, type TScadaData } from '../api/GetMachineLedStatus.ts'
-import { loadDataTotal, type TotalSumResult } from '../api/GetTotal.ts'
+import {
+  loadDataMachineLedStatus,
+  loadDataTotal,
+  type TScadaData,
+  type TotalSumResult,
+} from '../api/scada'
 
 // ==================== 路由参数处理（适配 /floor1 /floor2 /floor3） ====================
 const route = useRoute()

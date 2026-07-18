@@ -22,7 +22,7 @@
 <script setup lang="ts">
 
     import { computed } from 'vue' 
-    import { type TotalSumResult } from '../api/GetTotal.ts' 
+    import { type TotalSumResult } from '../api/scada'
     interface Props {
         sourceList?: TotalSumResult[]
          totalTitle:string
