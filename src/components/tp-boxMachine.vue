@@ -11,21 +11,18 @@
           <td v-for="n in myData.tdCount" :key="n">
             
             <!-- 机台图片 -->
-            <template 
-              v-for="item in myData.sourceList.filter((item) => item.MachineID?.colIndex === (m - 1) * myData.tdCount + n)"
-              :key="item.MachineID?.MachineID"
-            >
+            <template v-if="getCellItem((m - 1) * myData.tdCount + n)" :key="getCellItem((m - 1) * myData.tdCount + n)?.MachineID?.MachineID">
               <img 
-                :src="getMachineImage(item)"
-                :alt="`${item.MachineID?.MachineNO ?? '机台'}图片`"
+                :src="getMachineImage(getCellItem((m - 1) * myData.tdCount + n)!)"
+                :alt="`${getCellItem((m - 1) * myData.tdCount + n)?.MachineID?.MachineNO ?? '机台'}图片`"
                 class="sc-MachineImg" 
-                @click="openDialog(item)" 
+                @click="openDialog(getCellItem((m - 1) * myData.tdCount + n)!)" 
               />
             </template>
 
             <div class="MachineName">
-              <div class="divName " :class="`LedStatus${myData.sourceList.filter( (item) => item.MachineID?.colIndex === (m - 1) * myData.tdCount + n )[0]?.LedStatus}`">
-                  {{myData.sourceList.filter((item) => item.MachineID?.colIndex === (m - 1) * myData.tdCount + n)[0]?.MachineID?.MachineNO}}
+              <div class="divName " :class="`LedStatus${getCellItem((m - 1) * myData.tdCount + n)?.LedStatus}`">
+                  {{ getCellItem((m - 1) * myData.tdCount + n)?.MachineID?.MachineNO }}
               </div>
             </div>
 
@@ -129,8 +126,14 @@ const myData = computed(() => {
   return info
 })
 
+const machineByCell = computed(() => new Map(
+  myData.value.sourceList.map((item) => [item.MachineID?.colIndex ?? -1, item]),
+))
+const getCellItem = (index: number): TScadaData | undefined => machineByCell.value.get(index)
+
 const getMachineImage = (item: TScadaData): string => {
   const machine = item.MachineID
+  if (machine?.MachineTypeIconUrl) return machine.MachineTypeIconUrl
   if (machine?.Area?.trim() === '一楼' && machine.Stype?.trim() === 'M80') {
     return jg60Image
   }

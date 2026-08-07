@@ -58,8 +58,7 @@ import tpTotal from '../components/tp-total.vue'
 import tpRefreshCountDown from '../components/tp-refreshCountDown.vue'
 
 import {
-  loadDataMachineLedStatus,
-  loadDataTotal,
+  loadDashboardSnapshot,
   type TScadaData,
   type TotalSumResult,
 } from '../api/scada'
@@ -97,6 +96,7 @@ const week = ref('')
 
 const dataListMachineLedStatus = ref<TScadaData[]>([])
 const loading = ref(true)
+const refreshing = ref(false)
 
 const dataListTotalSumToday = ref<TotalSumResult[]>([])
 const totalTitleToday = ref("")
@@ -124,7 +124,10 @@ const updateTime = () => {
 
 // ==================== 核心数据加载 ====================
 const loadAllData = async () => {
-  loading.value = true
+  if (refreshing.value) return
+  refreshing.value = true
+  const initialLoad = dataListMachineLedStatus.value.length === 0
+  if (initialLoad) loading.value = true
   try {
     const now = Date.now()
     const tomorrow = now + 86400000
@@ -132,38 +135,29 @@ const loadAllData = async () => {
 
     console.log(`正在加载 ${area.value} 数据...`)   // 调试用，看控制台
 
-    // 机台LED状态
-    dataListMachineLedStatus.value = await loadDataMachineLedStatus(    
-      Number(dayjs(now).subtract(1, 'minute').format('YYYYMMDDHHmm')),  //状态 永远是获取上一分钟的状态
-      area.value
-    )
+    const snapshot = await loadDashboardSnapshot({
+      scadaNo: Number(dayjs(now).subtract(1, 'minute').format('YYYYMMDDHHmm')),
+      area: area.value,
+      todayStart: Number(dayjs(now).format('YYYYMMDD') + "0000"),
+      todayEnd: Number(dayjs(tomorrow).format('YYYYMMDD') + "0000"),
+      lastStart: Number(shiftInfo.LastT1),
+      lastEnd: Number(shiftInfo.LastT2),
+      currentStart: Number(shiftInfo.ThisT1),
+      currentEnd: Number(shiftInfo.ThisT2),
+    })
+    dataListMachineLedStatus.value = snapshot.machines
+    dataListTotalSumToday.value = [{ sum: { WkcntrSum: snapshot.totals.today } }]
+    dataListTotalSumLast.value = [{ sum: { WkcntrSum: snapshot.totals.last } }]
+    dataListTotalSumThis.value = [{ sum: { WkcntrSum: snapshot.totals.current } }]
 
-    // 今日产量
-    dataListTotalSumToday.value = await loadDataTotal(
-      Number(dayjs(now).format('YYYYMMDD') + "0000"), 
-      Number(dayjs(tomorrow).format('YYYYMMDD') + "0000"), 
-      area.value
-    )
     totalTitleToday.value = "今日产量"
     timePointToday.value = dayjs(now).format('DD') + "号00点-" + dayjs(now).format('DD') + "号24点"
 
-    // 上一班
-    dataListTotalSumLast.value = await loadDataTotal(
-      Number(shiftInfo.LastT1), 
-      Number(shiftInfo.LastT2), 
-      area.value
-    )
     totalTitleLast.value = `上一班(${shiftInfo.LastShift})`
     timePointLast.value = 
       shiftInfo.LastT1.slice(6, 8) + "号" + shiftInfo.LastT1.slice(8, 10) + "点-" +
       shiftInfo.LastT2.slice(6, 8) + "号" + shiftInfo.LastT2.slice(8, 10) + "点"
 
-    // 当前班
-    dataListTotalSumThis.value = await loadDataTotal(
-      Number(shiftInfo.ThisT1), 
-      Number(shiftInfo.ThisT2), 
-      area.value
-    )
     totalTitleThis.value = `当前班(${shiftInfo.ThisShift})`
     timePointThis.value = 
       shiftInfo.ThisT1.slice(6, 8) + "号" + shiftInfo.ThisT1.slice(8, 10) + "点-" +
@@ -173,6 +167,7 @@ const loadAllData = async () => {
     console.error('加载数据失败:', err)
   } finally {
     loading.value = false
+    refreshing.value = false
     refreshCountDown.value = 60
   }
 }

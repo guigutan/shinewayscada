@@ -25,6 +25,7 @@ export interface TMachine {
   CreateTime: string
   UpdateUser: string | null
   UpdateTime: string
+  MachineTypeIconUrl?: string | null
 }
 
 export interface TScadaData {
@@ -62,6 +63,25 @@ interface TotalProduction {
 interface HourProduction {
   HourScadaNO: number
   WkcntrSum: number
+}
+
+interface DashboardSnapshot {
+  machines: TScadaData[]
+  totals: { today: number; last: number; current: number }
+}
+
+export const loadDashboardSnapshot = async (params: {
+  scadaNo: number
+  area: string
+  todayStart: number
+  todayEnd: number
+  lastStart: number
+  lastEnd: number
+  currentStart: number
+  currentEnd: number
+}): Promise<DashboardSnapshot> => {
+  const response = await get<ApiEnvelope<DashboardSnapshot>>('/scada/dashboard', params)
+  return response.data
 }
 
 export const loadDataMachineLedStatus = async (
