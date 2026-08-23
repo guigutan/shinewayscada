@@ -18,6 +18,7 @@ export interface TMachine {
   OrderBy: number | null
   trCount: number | null
   tdCount: number | null
+  rowIndex: number | null
   colIndex: number | null
   tempItem: string | null
   tempOneToMany: number
@@ -68,6 +69,27 @@ interface HourProduction {
 interface DashboardSnapshot {
   machines: TScadaData[]
   totals: { today: number; last: number; current: number }
+  unplannedMachines: string[]
+}
+
+export interface ProductionMetric { standard: number; actual: number; rate: number | null }
+export interface ProductionReportRow {
+  id: string; code: string; name: string
+  today: ProductionMetric; last: ProductionMetric; current: ProductionMetric
+  hourly: Array<ProductionMetric & { hour: string }>
+}
+export interface ProductionReport {
+  dimension: 'product' | 'machine'; area: string; rows: ProductionReportRow[]
+  totals: { today: ProductionMetric; last: ProductionMetric; current: ProductionMetric; hourly: Array<ProductionMetric & { hour: string }> }
+}
+export interface ProductContext { ProductID:number;ProductCode:string;ProductName:string;ShortName:string|null;Specification:string|null;CycleSeconds:number;Cavities:number;Status:number }
+export interface MachineProductionContext {
+  machine: ProductionReportRow | null
+  currentProduct: ProductContext | null
+  schedules: Array<{ScheduleID:number;MachineID:number;ProductID:number|null;StartTime:string;Note:string|null;product:ProductContext|null}>
+}
+export interface AnalyticsParams {
+  area:string;todayStart:number;todayEnd:number;lastStart:number;lastEnd:number;currentStart:number;currentEnd:number;hourlyStart:number;hourlyEnd:number
 }
 
 export const loadDashboardSnapshot = async (params: {
@@ -118,4 +140,14 @@ export const loadDataHourWkcntrSum = async (
     HourScadaNO: item.HourScadaNO,
     sum: { WkcntrSum: item.WkcntrSum },
   }))
+}
+
+export const loadProductionReport = async (dimension:'product'|'machine', params:AnalyticsParams):Promise<ProductionReport> => {
+  const response=await get<ApiEnvelope<ProductionReport>>('/scada/production/report',{dimension,...params})
+  return response.data
+}
+
+export const loadMachineProductionContext = async (machineId:number,params:AnalyticsParams):Promise<MachineProductionContext> => {
+  const response=await get<ApiEnvelope<MachineProductionContext>>(`/scada/machines/${machineId}/production/context`,{...params})
+  return response.data
 }

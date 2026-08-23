@@ -18,4 +18,4 @@ npm run typecheck
 npm run build
 ```
 
-生产环境推荐把同域 `/api` 反向代理到后端 `7003` 端口。若前后端使用不同域名，在构建前设置 `VITE_API_BASE_URL` 为完整 API 地址。
+生产环境由统一 Nginx 网关发布到 `/scada/`，并把同域 `/api/` 反向代理到后端 `7003` 端口。若前后端使用不同域名，在构建前设置 `VITE_API_BASE_URL` 为完整 API 地址。

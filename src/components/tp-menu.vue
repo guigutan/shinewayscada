@@ -1,56 +1,10 @@
-<!-- src/components/tp-menu.vue -->
-<template>
-  <ul id="sc-menu">
-    <li :class="{ active: isActive('/floor1') }">
-      <router-link to="/floor1">一楼</router-link>
-    </li>
-    <li :class="{ active: isActive('/floor2') }">
-      <router-link to="/floor2">二楼</router-link>
-    </li>
-    <li :class="{ active: isActive('/floor3') }">
-      <router-link to="/floor3">三楼</router-link>
-    </li>
-  </ul>
-</template>
-
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-
-interface Props {
-  currentPath?: string
-}
-
-const props = defineProps<Props>()
-const route = useRoute()
-
-const isActive = (target: string) => {
-  if (props.currentPath) return props.currentPath === target
-  return route.path === target
-}
+const route=useRoute()
+const floor=computed(()=>String(route.params.floor||'1'))
+const view=computed(()=>String(route.params.view||'status'))
+const floors=[{id:'1',label:'一楼'},{id:'2',label:'二楼'},{id:'3',label:'三楼'}]
+const views=[{id:'status',label:'机台状态'},{id:'products',label:'基于产品报表'},{id:'machines',label:'基于机台报表'}]
 </script>
-
-<style scoped>
-/* 你的原有样式保持不变 */
-#sc-menu {
-  display: flex;
-  list-style: none;
-  padding: 0;
-  gap: 10px;
-  margin-top: 50px;
-}
-#sc-menu li {
-  padding: 6px 24px;
-  border-radius: 6px;
-  cursor: pointer;
-  background-color: rgb(127, 174, 206);
-}
-#sc-menu li a {
-  text-decoration: none;
-  color: inherit;
-}
-#sc-menu li.active {
-  background-color: rgb(10, 181, 204);
-  color: #fff;
-  font-weight: bold;
-}
-</style>
+<template><nav class="scada-nav" aria-label="看板导航"><div class="floor-tabs"><router-link v-for="item in floors" :key="item.id" :to="`/floor${item.id}/${view}`" :class="{active:floor===item.id}">{{item.label}}</router-link></div><div class="view-tabs"><router-link v-for="item in views" :key="item.id" :to="`/floor${floor}/${item.id}`" :class="{active:view===item.id}">{{item.label}}</router-link></div></nav></template>

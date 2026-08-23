@@ -1,10 +1,7 @@
 <!-- src\components\tp-clock.vue -->
 
 <template>
-  <div class="sc-timenow">
-    <div class="sc-datetime">{{ Mydata.time }}</div>
-    <div>{{ Mydata.date }} {{ Mydata.week }}</div>
-  </div>
+  <div class="sc-clock-frame">{{ Mydata.date }} {{ Mydata.week }} {{ Mydata.time }}</div>
 </template>
 
 <script setup lang="ts">
@@ -50,14 +47,23 @@
 </script>
 
 <style scoped>
-.sc-timenow {
-  padding: 10px 0;
-  background-color: black;
-  color: white;
+.sc-clock-frame {
+  width: 100%;
+  min-height: 46px;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 7px;
+  color: #fff;
+  background: #16343c;
+  box-shadow: 7px 7px 10px -4px rgba(0, 0, 0, 0.78);
+  font-size: 16px;
+  font-weight: 700;
   text-align: center;
-  border-radius: 20px;
-}
-.sc-datetime {
-  font-size: xx-large;
+  text-shadow: none;
+  white-space: nowrap;
 }
 </style>

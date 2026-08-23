@@ -19,13 +19,14 @@
 <style scoped>
 .sc-refreshCountDown{
     color: rgb(157, 194, 206);
-    font-size: larger;
+    font-size: 13px;
    
-    margin-top: 20px;
+    margin-top: 0;
+    white-space: nowrap;
 }
 .sc-refreshCountDown span{
-    font-size: 24px;
-    color:#fff;
+    font-size: 15px;
+    color:#ffb23e;
      font-weight: bold;
 }
 

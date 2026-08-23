@@ -8,30 +8,30 @@
                 <tr>
                 <td><div class="sc-LedIco"><img src="../assets/greenLED.png"/></div></td>
                 <td><div class="sc-MachineIco"><img src="../assets/CNC40.png"/></div></td>
-                <td><div class="sc-LedStr">绿  灯</div></td>
+                <td><div class="sc-LedStr sc-LedStr--running">绿  灯</div></td>
                 <td><div class="sc-LedSum">{{statusCount["1"]+statusCount["0"]}}台</div></td>
-                <td><div class="sc-LedPercentage"><span class="sc-Percentage">{{ calcPercentage(statusCount["1"]+statusCount["0"], statusCount["All"]) }}</span></div></td>
+                <td><div class="sc-LedPercentage"><div class="sc-Percentage sc-Percentage--running">{{ calcPercentage(statusCount["1"]+statusCount["0"], statusCount["All"]) }}</div></div></td>
                 </tr>
                 <tr>
                 <td><div class="sc-LedIco"><img src="../assets/yellowLED.png"/></div></td> 
                 <td><div class="sc-MachineIco"><img src="../assets/CNC40.png"/></div></td>
-                <td><div class="sc-LedStr">黄  灯</div></td>
+                <td><div class="sc-LedStr sc-LedStr--standby">黄  灯</div></td>
                 <td><div class="sc-LedSum">{{statusCount["2"]}}台</div></td>
-                <td><div class="sc-LedPercentage"><span class="sc-Percentage">{{ calcPercentage(statusCount["2"], statusCount["All"]) }}</span></div></td>
+                <td><div class="sc-LedPercentage"><div class="sc-Percentage sc-Percentage--standby">{{ calcPercentage(statusCount["2"], statusCount["All"]) }}</div></div></td>
                 </tr>
                 <tr>
                 <td><div class="sc-LedIco"><img src="../assets/redLED.png"/></div></td>
                 <td><div class="sc-MachineIco"><img src="../assets/CNC40.png"/></div></td>
-                <td><div class="sc-LedStr">红  灯</div></td>
+                <td><div class="sc-LedStr sc-LedStr--alarm">红  灯</div></td>
                 <td><div class="sc-LedSum">{{statusCount["3"]}}台</div></td>
-                <td><div class="sc-LedPercentage"><span class="sc-Percentage">{{ calcPercentage(statusCount["3"], statusCount["All"]) }}</span></div></td>
+                <td><div class="sc-LedPercentage"><div class="sc-Percentage sc-Percentage--alarm">{{ calcPercentage(statusCount["3"], statusCount["All"]) }}</div></div></td>
                 </tr>
                 <tr>
                 <td><div class="sc-LedIco"><img src="../assets/errorLED.png"/></div></td>
                 <td><div class="sc-MachineIco"><img src="../assets/CNC40.png"/></div></td>
-                <td><div class="sc-LedStr">通信异常</div></td>
+                <td><div class="sc-LedStr sc-LedStr--offline">异常</div></td>
                 <td><div class="sc-LedSum">{{statusCount["-1"]}}台</div></td>
-                <td><div class="sc-LedPercentage"><span class="sc-Percentage">{{ calcPercentage(statusCount["-1"], statusCount["All"]) }}</span></div></td>
+                <td><div class="sc-LedPercentage"><div class="sc-Percentage sc-Percentage--offline">{{ calcPercentage(statusCount["-1"], statusCount["All"]) }}</div></div></td>
                 </tr>       
                 <tr>
                 <td colspan="5"><div class="sc-jdl"><div>机台总数：{{statusCount["All"]}} </div><div> 稼动率：{{ calcPercentage(statusCount["1"]+statusCount["0"]+statusCount["2"], statusCount["All"]) }}</div></div></td>
@@ -69,7 +69,7 @@
 
 <style scoped>
         .sc-LedStatus{
-            padding-right:  5rem;
+            padding-right:  1rem;
         }
         .sc-CountSum{
             padding-right:  5rem;
@@ -96,6 +96,8 @@
             align-items:flex-end;   
         }
         .sc-LedStr{  
+            min-width:50px;
+            padding:0 5px;
             border-top:1px solid #715121;
             border-left:1px solid #715121;
             border-right:1px solid #715121;
@@ -105,12 +107,34 @@
             margin-top: 15px;
         }
         .sc-LedSum{min-width: 55px;}
-        .sc-Percentage{
-            background-color:#00CCFF;
-            padding: 0 25px;
-            border-radius: 0.5rem;  
-            color:black;
+        .sc-LedPercentage{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 105px;
+            background: transparent;
         }
+        .sc-Percentage{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 105px;
+            min-height: 0;
+            padding: 2px 25px;
+            border-radius: 8px;
+            color: #fff;
+            line-height: 1.4;
+            text-align: center;
+            white-space: nowrap;
+        }
+        .sc-LedStr--running{color:#00FF00;background:transparent;}
+        .sc-LedStr--standby{color:#FFFF00;background:transparent;}
+        .sc-LedStr--alarm{color:#FF0000;background:transparent;}
+        .sc-LedStr--offline{color:#CCCCCC;background:transparent;}
+        .sc-Percentage--running{color:#000;background:#00FF00;}
+        .sc-Percentage--standby{color:#000;background:#FFFF00;}
+        .sc-Percentage--alarm{color:#fff;background:#FF0000;}
+        .sc-Percentage--offline{color:#000;background:#CCCCCC;}
         .sc-jdl{
             display: flex;
             display: -webkit-flex;      

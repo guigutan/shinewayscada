@@ -2,12 +2,12 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    { path: '/', redirect: '/floor1' },
-
+    { path: '/', redirect: '/floor1/status' },
+    { path: '/floor:floor', redirect: to => `/floor${String(to.params.floor)}/status` },
     {
-      path: '/floor:floor',        // ← 注意：这里是 /floor:floor （没有斜杠）
+      path: '/floor:floor/:view(status|products|machines)',
       component: () => import('../components/Floor.vue'),
       name: 'floor'
     }
